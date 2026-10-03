@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookstore Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="topbar">
+        <a class="brand" href="#" data-page="dashboard">
+            <span class="brand-icon">📚</span>
+            <span><strong>Bookstore Manager</strong><small>Manage books, stock and sales</small></span>
+        </a>
+        <nav id="main-nav">
+            <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+            <button class="nav-btn" data-page="inventory">Inventory</button>
+            <button class="nav-btn" data-page="sales">Sales</button>
+            <button class="nav-btn" data-page="reports">Reports</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section id="page-dashboard" class="page active">
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">OVERVIEW</p>
+                    <h1>Dashboard</h1>
+                    <p class="muted">Here is what is happening in your bookstore.</p>
+                </div>
+                <button class="btn primary" id="dashboard-add">＋ Add a book</button>
+            </div>
+            <div class="stats-grid">
+                <article class="stat-card blue"><span class="stat-icon">📚</span><span>Total titles</span><strong
+                        id="stat-titles">0</strong><small>Different books in inventory</small></article>
+                <article class="stat-card green"><span class="stat-icon">📦</span><span>Books in stock</span><strong
+                        id="stat-stock">0</strong><small>Total available copies</small></article>
+                <article class="stat-card orange"><span class="stat-icon">⚠️</span><span>Low-stock titles</span><strong
+                        id="stat-low">0</strong><small>5 copies or fewer</small></article>
+                <article class="stat-card purple"><span class="stat-icon">₹</span><span>Total sales</span><strong
+                        id="stat-sales">₹0.00</strong><small>Recorded sales value</small></article>
+            </div>
+            <div class="two-col">
+                <section class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Recent inventory</h2>
+                            <p class="muted">Your latest book records</p>
+                        </div><button class="text-btn" data-goto="inventory">View inventory →</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Book</th>
+                                    <th>Author</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-books"></tbody>
+                        </table>
+                    </div>
+                    <p id="recent-empty" class="empty hidden">No books yet. Add your first book to get started.</p>
+                </section>
+                <section class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Quick sale</h2>
+                            <p class="muted">Record a book sale</p>
+                        </div><span class="panel-icon">🧾</span>
+                    </div>
+                    <form id="sale-form" class="form-grid">
+                        <label class="full">Book<select id="sale-book" required>
+                                <option value="">Select a book</option>
+                            </select></label>
+                        <label>Quantity<input id="sale-quantity" type="number" min="1" step="1" value="1"
+                                required></label>
+                        <div class="sale-total-box"><span>Bill total</span><strong id="sale-total">₹0.00</strong></div>
+                        <button class="btn primary full" type="submit">Record sale</button>
+                    </form>
+                    <p class="helper">Stock is reduced automatically when a sale is recorded.</p>
+                </section>
+            </div>
+        </section>
+
+        <section id="page-inventory" class="page">
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">CATALOGUE</p>
+                    <h1>Book inventory</h1>
+                    <p class="muted">Add, edit, search and remove book records.</p>
+                </div><button class="btn primary" id="inventory-add">＋ Add a book</button>
+            </div>
+            <section class="panel">
+                <div class="toolbar"><input id="book-search" type="search"
+                        placeholder="Search by title, author or ID…"><span id="inventory-count" class="muted"></span>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Book title</th>
+                                <th>Author</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-body"></tbody>
+                    </table>
+                </div>
+                <p id="inventory-empty" class="empty hidden">No matching books found.</p>
+            </section>
+        </section>
+
+        <section id="page-sales" class="page">
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">TRANSACTIONS</p>
+                    <h1>Sales history</h1>
+                    <p class="muted">Review recorded sales and bills.</p>
+                </div>
+            </div>
+            <div class="stats-grid compact">
+                <article class="stat-card purple"><span>Total transactions</span><strong id="sales-count">0</strong>
+                </article>
+                <article class="stat-card green"><span>Units sold</span><strong id="units-sold">0</strong></article>
+                <article class="stat-card blue"><span>Sales revenue</span><strong id="sales-revenue">₹0.00</strong>
+                </article>
+            </div>
+            <section class="panel">
+                <div class="toolbar"><input id="sales-search" type="search"
+                        placeholder="Search sales by book title or sale ID…"><button id="export-sales"
+                        class="btn secondary">Export CSV</button></div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sale ID</th>
+                                <th>Date and time</th>
+                                <th>Book</th>
+                                <th>Qty</th>
+                                <th>Unit price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sales-body"></tbody>
+                    </table>
+                </div>
+                <p id="sales-empty" class="empty hidden">No sales have been recorded yet.</p>
+            </section>
+        </section>
+
+        <section id="page-reports" class="page">
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">INSIGHTS</p>
+                    <h1>Reports</h1>
+                    <p class="muted">A quick summary of your bookstore's current data.</p>
+                </div><button class="btn secondary" id="export-books">Export inventory CSV</button>
+            </div>
+            <div class="stats-grid">
+                <article class="stat-card blue"><span>Inventory cost value*</span><strong
+                        id="report-value">₹0.00</strong><small>*Based on listed selling prices</small></article>
+                <article class="stat-card green"><span>Average sale value</span><strong
+                        id="report-average">₹0.00</strong></article>
+                <article class="stat-card orange"><span>Out-of-stock titles</span><strong id="report-out">0</strong>
+                </article>
+                <article class="stat-card purple"><span>Most sold book</span><strong id="report-top"
+                        class="smaller">—</strong></article>
+            </div>
+            <section class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Low-stock report</h2>
+                        <p class="muted">Titles with five or fewer copies remaining</p>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Book</th>
+                                <th>Author</th>
+                                <th>Stock remaining</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="low-stock-body"></tbody>
+                    </table>
+                </div>
+                <p id="low-stock-empty" class="empty hidden">No low-stock books. Your shelves are looking good.</p>
+            </section>
+            <section class="panel danger-zone">
+                <h2>Data management</h2>
+                <p class="muted">Your data is stored in this browser on this device. Clearing browser site data can
+                    remove it.</p><button id="reset-data" class="btn danger">Reset all project data</button>
+            </section>
+        </section>
+    </main>
+
+    <footer><span>Bookstore Manager</span><span>HTML · CSS · JavaScript · localStorage</span></footer>
+
+    <dialog id="book-dialog">
+        <form id="book-form" method="dialog">
+            <div class="dialog-heading">
+                <div>
+                    <p class="eyebrow">BOOK DETAILS</p>
+                    <h2 id="dialog-title">Add a book</h2>
+                </div><button type="button" class="icon-btn" id="close-dialog" aria-label="Close">✕</button>
+            </div>
+            <input id="book-id" type="hidden">
+            <label>Book title<input id="book-title" type="text" maxlength="120" required
+                    placeholder="e.g. The Alchemist"></label>
+            <label>Author<input id="book-author" type="text" maxlength="100" required
+                    placeholder="e.g. Paulo Coelho"></label>
+            <div class="form-grid">
+                <label>Price (₹)<input id="book-price" type="number" min="0.01" step="0.01" required
+                        placeholder="299.00"></label>
+                <label>Quantity<input id="book-quantity" type="number" min="0" step="1" required
+                        placeholder="10"></label>
+            </div>
+            <p id="book-error" class="form-error hidden"></p>
+            <div class="dialog-actions"><button type="button" class="btn secondary"
+                    id="cancel-dialog">Cancel</button><button type="submit" class="btn primary">Save book</button></div>
+        </form>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="script.js"></script>
+</body>
+
+</html>
